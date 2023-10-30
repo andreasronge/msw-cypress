@@ -1,18 +1,12 @@
-import { rest } from 'msw'
+import { http, HttpResponse } from 'msw'
 
 const apiPath = '/api/items'
 
-export const itemsHandler = rest.post(apiPath, async (req, res, ctx) => {
-  const body = await req.json()
-  return res(
-    ctx.json(body)
-  )
+export const itemsHandler = http.post(apiPath, async ({request}) => {
+  const body = await request.json();
+  return HttpResponse.json(body);
 })
 
-export const sampleServerHandler = rest.post(apiPath, async (_, res, ctx) => {
-  return res(
-    ctx.json({
-      value: 'Hi from Server/Cypress'
-    })
-  )
+export const sampleServerHandler = http.post(apiPath, async () => {
+  return HttpResponse.json({value: 'Hi from Server/Cypress'})
 })

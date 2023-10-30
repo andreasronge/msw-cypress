@@ -1,9 +1,10 @@
-import { setupWorker, type SetupWorker, type RequestHandler } from 'msw'
+import { setupWorker, type SetupWorker } from 'msw/browser'
+import { type HttpHandler } from 'msw';
 
 declare global {
   namespace Cypress {
     interface Chainable {
-      interceptRequest(...handlers: RequestHandler[]): void
+      interceptRequest(...handlers: HttpHandler[]): void
     }
   }
 }
@@ -20,7 +21,7 @@ Cypress.on('test:before:run', () => {
   worker.resetHandlers()
 })
 
-Cypress.Commands.add('interceptRequest', (...handlers: RequestHandler[]) => {
+Cypress.Commands.add('interceptRequest', (...handlers: HttpHandler[]) => {
   if (!worker) return
   worker.use(...handlers)
 })
